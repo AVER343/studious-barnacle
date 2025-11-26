@@ -4,23 +4,23 @@ services:
     ports:
       - "80:80"
     volumes:
-      - ./api-gateway/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./apps/gateway/nginx.conf:/etc/nginx/nginx.conf:ro
     depends_on:
       - market-analysis
       - trade-execution
 
   # --- APPLICATION LAYER ---
   market-analysis:
-    build: ./services/market-analysis
+    build: ./apps/market-analysis
     container_name: market-analysis
     ports:
       - "3000"
     volumes:
-     - ./services/market-analysis:/app 
+     - ./apps/market-analysis:/app 
      - /app/node_modules
     command: npm run start:dev
   trade-execution:
-    build: ./services/trade-execution
+    build: ./apps/trade-execution
     container_name: trade-execution
     ports:
       - "8080"
