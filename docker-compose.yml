@@ -1,5 +1,5 @@
 services:
-  api-gateway:
+  gateway:
     image: nginx:alpine
     ports:
       - "80:80"

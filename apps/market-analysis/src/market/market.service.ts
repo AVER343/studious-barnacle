@@ -1,6 +1,7 @@
 import { Injectable, Logger, HttpException } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
 import { AxiosError } from 'axios';
+import { firstValueFrom } from 'rxjs';
 
 @Injectable()
 export class MarketService {
@@ -13,16 +14,11 @@ export class MarketService {
         const url = 'https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd';
 
         try {
-            this.logger.log('Fetching Bitcoin Price...');
-
-            // 2. The Network Call
-            const data = await this.httpService.get(url);
-            console.log({ data })
-            // 3. The Extraction
-            const price: number = 0;
-
-            this.logger.log(`Success: BTC is $${price}`);
-
+            let result = await firstValueFrom(this.httpService.get(url));
+            let price: number = 0;
+            if(result?.data?.bitcoin){
+                price = result.data.bitcoin.usd;
+            }
             return {
                 asset: 'BTC',
                 price_usd: price,
